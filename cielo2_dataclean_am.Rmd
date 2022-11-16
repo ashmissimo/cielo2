@@ -69,7 +69,8 @@ d_all<-d_all[(d_all$sort_god==1),]
 # now we want to view our dataframe in the console to make sure we removed the right particiants. great!
 
 # let's remove individual participants now because their parents coached them through the interview or they left the experiment because they had to go to the bathroom IMMEDIATELY. we do that by using the subset function and removing the values where the column number (in this case, id_num) equals whatever value. So, let's say we know that participants with IDs 134, 27, and 98 need to be removed, how do we do that?
-d_all<-subset(d_all, pid != 211 & pid != 234 & pid != 248 & pid != 293)
+d_all<-subset(d_all, pid != 152 & pid != 211 & pid != 234 & pid != 245 & pid != 248 & pid != 261 & pid != 293)
+# up to this point, the data excludes kids who were distracted or coached - but not those who said god was pretend.
 ```
 
 ```{r creating a subset of the data}
@@ -89,6 +90,20 @@ d_sort<-subset(d_sort, gender!=3)
 
 ```
 
+```{r exporting data}
+# below is the file for cleaned data that excludes participants who were distracted/coached, but includes god is pretend
+# commented the data file out so it doesn't keep saving it every time I run it 
+# write.csv(d_all,"\\cielo2_cleaneddata.csv", row.names = FALSE)
+```
+
+``` {r exporting real data}
+d_all_real<-subset(d_all, sort_god != 2)
+d_all_real<-subset(d_all_real, pid != 202)
+# above excluded participant 202 because in p. log, Matt noted  "god is pretend"... but chose "real" in Qualtrics
+# write.csv(d_all_real,"\\cielo2_cleaneddata_real.csv", row.names = FALSE)
+```
+
+
 ```{r creating descriptive tables}
 
 # if you're feeling craysee, try and make a table
@@ -102,4 +117,3 @@ sortgerm_plot
 
 
 ```
-sdfghjk
