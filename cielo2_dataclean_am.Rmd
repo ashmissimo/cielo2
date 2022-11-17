@@ -115,5 +115,6 @@ sortgerm_plot <- ggplot(d_sort, aes(as.character(sort_germ))) +
   scale_x_discrete(labels=c('Real', 'N/A'))
 sortgerm_plot
 
+# ashley will practice making more plots in another markdown script
 
 ```
