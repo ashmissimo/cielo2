@@ -1,0 +1,39 @@
+---
+title: "cielo2_descriptives"
+author: "Ashley"
+date: '2022-11-17'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r reading in data}
+
+d_all <- read_csv("\\cielo2_cleaneddata_real.csv")
+
+```
+```{r god certainty}
+godcertainty_plot <- ggplot(d_all, aes(sort_god_sure)) +
+  geom_bar(fill='pink') +
+  labs(x='Degrees of Certainty', y="Number of Participants", title ="Certainty of God's Realness") +
+  theme_minimal()
+godcertainty_plot
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
