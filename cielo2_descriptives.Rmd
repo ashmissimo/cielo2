@@ -91,4 +91,5 @@ ggplot(data = df_ec2, aes(Var2, Freq)) +
   facet_wrap(~Var1, ncol = 1)
 
 ```
+##
 
