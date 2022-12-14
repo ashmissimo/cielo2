@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(reshape2)
 library(dplyr)
+library(ggplot2)
 ```
 
 ## Cielo 2 Descriptives
@@ -40,44 +41,50 @@ godcertainty_plot
 ########################################################################################
 
 # here, we're creating a new dataframe for a subset of our data that we want to look at (the sort questions). when we create a new dataframe, we want to use the select function in the dplyr package loaded in our setupchunk. which columns do we want to select to include in this subset? probably all of the sort_ columns and pid, and gender? maybe age too. start there.
-d_exist <- dplyr::select(d_all, gender, exist_germs, exist_tooth, exist_vitamins, exist_merm, exist_elf, exist_fairy,
-                         exist_soul, exist_god, exist_santa, exist_elf, contains("id_num"))
+d_sort <- dplyr::select(d_all, gender, sort_germ, sort_tooth, sort_vitamin, sort_mermaid, sort_elf, sort_fairy,
+                         sort_soul, sort_god, sort_santa, sort_elf, contains("pid"))
 
 #i'm subsetting out the other gender because they are only one participant in cielo1
-d_exist<-subset(d_exist, gender!="Other")
+d_sort<-subset(d_sort, gender!="3")
 
 # let's reshape our data to tall format so we can include all of the same plots on the same figure watch this youtube video for what it means to reshape our data: https://www.youtube.com/watch?v=eLCKL7BNIAk&ab_channel=StatisticsGlobe
 
 # hl added the reshape2 library to our setup chunk. this is the library that the melt function is in (just fyi)
-d_exist <- melt(d_all, id.vars= c("id_num", "gender"))
+d_sort <- melt(d_sort, id.vars= c("pid", "gender"))
 
 #let's view our tall data now. did we do it right?
 
 # here, i'm making a dataframe with frequency counts added in (just to see what kind of figure i should end up with)
 #only do this with a subset of your data, including the "sort" variables or "sort_sure", for example. my sort data was called exist in my code, so that's why you see d_exist here
-d_exist_counts <- table(d_exist$value, d_exist$variable, d_exist$gender)
-addmargins(d_exist_counts)
-round(prop.table(d_exist_counts,2)*100,digits=0)
-df_ec <- as.data.frame(d_exist_counts) 
-df_ec
+d_sort_counts <- table(d_sort$value, d_sort$variable, d_sort$gender)
+addmargins(d_sort_counts)
+round(prop.table(d_sort_counts,2)*100,digits=0)
+sort_count <- as.data.frame(d_sort_counts) 
+sort_count
 
 # creating our ggplot for all exist questions including both genders together. i'm labeling it p_exist because we're making a plot for the exist questions
-p_exist <- ggplot(data = df_ec, aes(x = Var2, y = Freq, fill = Var1)) +
+p_sort <- ggplot(data = sort_count, aes(x = Var2, y = Freq, fill = Var1)) +
        geom_bar(stat = "identity", width = .5) +
       geom_text(aes(label = Freq), position = position_stack(vjust = 0.5), color="black", size=3) +
       theme_classic() +
       labs(title="Children's responses to real or pretend questions", x ="Item", y = "Counts", fill = "Response") +
       theme(axis.text.x = element_text(angle=20))
-
+p_sort
 # fixing the x axis labels
-p_exist <- p_exist + scale_x_discrete(labels=c("exist_germs" = "Germs", "exist_tooth" = "Tooth Fairy", "exist_vitamins" = "Vitamins", "exist_merm" = "Mermaids", "exist_elf" = "Elves", "exist_fairy" = "Fairies", "exist_soul" = "Souls", "exist_god" = "God", "exist_santa" = "Santa"))
+p_sort <- p_sort + scale_x_discrete(labels=c("sort_germ" = "Germs", "sort_tooth" = "Tooth Fairy", "sort_vitamin" = "Vitamins", "sort_mermaid" = "Mermaids", "sort_elf" = "Elves", "sort_fairy" = "Fairies", "sort_soul" = "Souls", "sort_god" = "God", "sort_santa" = "Santa"))
 
 # faceting by gender
-p_exist <- p_exist + facet_wrap(~Var3, ncol = 1) +
+#facet wrap means "group by"
+p_sort <- p_sort + facet_wrap(~Var3, ncol = 2) +
     theme(panel.spacing = unit(1, "lines"))
-
-p_exist + coord_flip()
+p_sort
+#coord_flip switches x and y axes visually
+#p_sort + coord_flip()
+#at this point, we need to check to see what the 1 and 2 values are (gender options or sureness options)
+# i can do this by tallying the number of genders and seeing if they sum to the total count of that variable
+# could also not facet by gender
 ```
+
 
 ```{r clustered bar chart for real/pretend questions}
 
